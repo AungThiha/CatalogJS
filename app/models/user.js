@@ -3,12 +3,11 @@ var mongoose = require('mongoose'),
     randomToken = require('random-token'),
     hash = require('node_hash'),
     urlencode = require('urlencode');
-var Schema = mongoose.Schema;
 
-var encryptKey = "lzkdakpiwehjnfjadhfjadfsdbcuy32idnzzkka383984y3984yr4jbkasdknfdhzkz39nlmdnfgouyeladkjzheuui";
+var encryptKey = require("../../config/key").userEncrptor;
 var encryptor = require('simple-encryptor')(encryptKey);
 // create a schema
-var userSchema = new Schema({
+var userSchema = new mongoose.Schema({
   name: {type: String, required: true},
   email: { type: String, required: true, unique: true },
   password: {type: String, required: true}
@@ -36,7 +35,7 @@ User.generateHash = function(password){
 
 
 User.isValidToken = function(token, user_id, done){
-  var splits = encryptor.decrypt(token).split("|");
+  var splits = encryptor.decrypt(urlencode.decode(token)).split("|");
   if (splits.length !== 3) {
     return done(true, 403, "Invalid Token");
   }

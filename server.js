@@ -44,7 +44,7 @@ var storage = multer.diskStorage({
   	var filename;
   	if (extension) {
   		filename = file.originalname.substring(0, file.originalname.length - extension.length) +
-  			Date.now() + "." + extension;
+  			Date.now() + extension;
   	}else{
   		filename = file.originalname + Date.now();
   	}
@@ -54,7 +54,10 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 app.post('/test/upload', upload.array('torrents'), function (req, res, next) {
-  res.json({ error: null, message: "uploaded"});
+  res.json({ error: null, message: req.files.map(function(f){
+      return req.protocol + '://' + req.get('host') + "/" + f.path;
+    })
+  });
 })
 
 app.listen(port);

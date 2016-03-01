@@ -1,8 +1,7 @@
 
 var express = require('express'),
     User = require('../models/user'),
-    bleach = require('bleach'),
-    urlencode = require('urlencode');
+    bleach = require('bleach');
 
 module.exports = function(passport){
 
@@ -46,7 +45,7 @@ module.exports = function(passport){
         res.json({ error: true, message: "Please, login"});
         return;
       }
-      User.isValidToken(urlencode.decode(req.headers.token), req.params.user_id, function(err, status, user){
+      User.isValidToken(req.headers.token, req.params.user_id, function(err, status, user){
         if (err) {
             res.status(status);
             res.json({ error: true, message: user});
