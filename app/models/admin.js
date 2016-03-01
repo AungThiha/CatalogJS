@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
     base64 = require('base64-url'),
     encryptor = require('simple-encryptor');
 
-var keys = require("./config/key");
+var keys = require("../../config/key");
 var tokenEncryptor = encryptor(keys.adminEncrptor);
 var passwordEncryptor = encryptor(keys.passwordEncryptor);
 

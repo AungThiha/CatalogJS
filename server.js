@@ -16,7 +16,7 @@ mongoose.connect(require('./config/database').url);
 require('./config/passport')(passport); // pass passport for configuration
 
 app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser("3dafjoei32j30dvnqxmziea33"));
+app.use(cookieParser(require("./config/key").cookieEncrptor));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
