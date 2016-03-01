@@ -32,5 +32,30 @@ app.use(flash());
 var user_router = require('./app/routers/user')(passport);
 app.use('/users', user_router);
 
+var multer = require('multer'),
+    path = require('path');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+  	var extension = path.extname(file.originalname);
+  	var filename;
+  	if (extension) {
+  		filename = file.originalname.substring(0, file.originalname.length - extension.length) +
+  			Date.now() + "." + extension;
+  	}else{
+  		filename = file.originalname + Date.now();
+  	}
+    cb(null, filename);
+  }
+});
+var upload = multer({ storage: storage });
+
+app.post('/test/upload', upload.array('torrents'), function (req, res, next) {
+  res.json({ error: null, message: "uploaded"});
+})
+
 app.listen(port);
 console.log('App started! Look at ' + port);
