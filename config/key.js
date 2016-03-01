@@ -1,0 +1,7 @@
+
+module.exports = {
+	userEncrptor: "lzkdakpiwehjnfjadhfjadfsdbcuy32idnzzkka383984y3984yr4jbkasdknfdhzkz39nlmdnfgouyeladkjzheuui",
+	adminEncrptor: "3ohajdhjzbdjkahwerg3uyo23uyjhdgfuy3tr32utyakjdbzzdnzarr328329809298376yiujadkjbknzadjdfiu33k3ndsmnaudyiuw831kfksdjhfajeh",
+	passwordEncryptor: "3ojaknjnkzoiu3bkzdg23uy392knzmmzduhfakjh32i3uy8289okjnznzuiehwejhfdiuui333288jkmndnfhakjnzkjhi3ury3uakdfgiu3yr3rfaewkfewifadffppoefe8jba",
+	cookieEncrptor: "3dafjoei32j30dvnqxmziea33"
+};
