@@ -72,15 +72,22 @@ module.exports = function(passport){
             });
         })
         .put(function(req, res){
-
-            if (!req.body.hasOwnProperty('name')) {
+            var hasName = req.body.hasOwnProperty('name');
+            var hasPassword = req.body.hasOwnProperty('password');
+            if (!hasName && !hasPassword) {
                 res.status(400);
-                res.json({ error: true, message: 'Invalid Name'});
+                res.json({ error: true, message: 'No valid values'});
                 return;
             }
-            var name = bleach.sanitize(req.body['name']);
+            var updates = {};
+            if (hasName) {
+                updates.name = bleach.sanitize(req.body['name']);
+            }
+            if (hasPassword) {
+                updates.password = User.generateHash(req.body['password']);
+            }
 
-            User.findOneAndUpdate({_id: req.params.user_id}, { $set: { name: name }}, {new: true}, function(err, user){
+            User.findOneAndUpdate({_id: req.params.user_id}, { $set: updates}, {new: true}, function(err, user){
                 if (err){
                     res.status(500);
                     res.json({ error: true, message: err});
