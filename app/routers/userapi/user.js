@@ -1,6 +1,6 @@
 
 var express = require('express'),
-    User = require('../models/user'),
+    User = require('../../models/user'),
     bleach = require('bleach');
 
 module.exports = function(passport){
@@ -20,6 +20,7 @@ module.exports = function(passport){
         function(req, res){
             if (req.user) {
                 var user = req.user.toJSON();
+                delete user['password'];
                 user.token = req.user.generateToken();
                 res.json(user);
             }else{

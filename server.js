@@ -3,17 +3,13 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     mongoose = require('mongoose'),
-    passport = require('passport'),
-    flash = require('connect-flash'),
-    morgan = require('morgan'),
-    User = require('./app/models/user');
+    // flash = require('connect-flash'),
+    morgan = require('morgan');
 
 var port = process.env.PORT || 8080;
 var app = express();
 
 mongoose.connect(require('./config/database').url);
-
-require('./config/passport')(passport); // pass passport for configuration
 
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser(require("./config/key").cookieEncrptor));
@@ -24,13 +20,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-
-app.use(passport.initialize());
 // app.use(passport.session()); 
-app.use(flash());
+// app.use(flash());
 
-var user_router = require('./app/routers/user')(passport);
-app.use('/users', user_router);
+// var user_router = require('./app/routers/user')(passport);
+
+require('./app/routers/routes')(app, express);
 
 var multer = require('multer'),
     path = require('path');

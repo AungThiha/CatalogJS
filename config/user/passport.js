@@ -3,7 +3,7 @@
  var localStrategy = require('passport-local').Strategy;
 
  // load up the user model
- var User = require('../app/models/user'),
+ var User = require('../../app/models/user'),
     bleach = require('bleach');
 
  // expose this function to our app using module.exports
@@ -26,9 +26,11 @@
     	passReqToCallback: true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done){
+        console.log("here we are");
     	// asynchronous
     	// User.findOne won't fire unless data is sent back
     	process.nextTick(function(){
+
 
     		// find a user whose email is the same as the forms email
     		// we are checking to see if the user trying to login already exists

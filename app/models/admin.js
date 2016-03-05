@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
 
 var keys = require("../../config/key");
 var tokenEncryptor = encryptor(keys.adminEncrptor);
-var passwordEncryptor = encryptor(keys.passwordEncryptor);
 
 // create a schema
 var adminSchema = new mongoose.Schema({
@@ -19,7 +18,7 @@ var adminSchema = new mongoose.Schema({
 
 // checking if password is valid
 adminSchema.methods.isValidPassword = function(password){
-  return bcrypt.compareSync(base64.encode(passwordEncryptor.encrypt(password)), this.password);
+  return bcrypt.compareSync(base64.encode(password + keys.passwordEncryptor), this.password);
 };
 
 adminSchema.methods.generateToken = function(){
@@ -34,11 +33,11 @@ var Admin = mongoose.model('Admin', adminSchema);
 // methods =============
 // generating a hash
 Admin.generateHash = function(password){
-  return bcrypt.hashSync(base64.encode(passwordEncryptor.encrypt(password)), bcrypt.genSaltSync(8), null);
+  return bcrypt.hashSync(base64.encode(password + keys.passwordEncryptor), bcrypt.genSaltSync(8), null);
 };
 
 
-Admin.isValidToken = function(token, admin_id, done){
+Admin.isValidToken = function(token, done){
   var splits = base64.decode(tokenEncryptor.decrypt(urlencode.decode(token))).split("$");
   if (splits.length !== 3) {
     return done(true, 403, "Invalid Token");
@@ -49,9 +48,6 @@ Admin.isValidToken = function(token, admin_id, done){
     }
     if (!admin) {
       return done(true, 403, 'No Admin found.');
-    }
-    if (admin.id != admin_id) {
-      return done(true, 403, "You're not authorized");
     }
     var hashValue = hash.sha256(admin.password, splits[1]);
     if (hashValue === splits[2]) {
